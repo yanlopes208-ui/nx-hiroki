@@ -2,10 +2,10 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default async function handler(req, res) {
   try {
-    const prompt = req.query.prompt;
+    const prompt = req.query.propmt; // 👈 nome igual ao da URL
 
     if (!prompt) {
-      return res.status(400).json({ error: "Faltou o parâmetro 'prompt' na URL." });
+      return res.status(400).json({ error: "Faltou o parâmetro 'propmt' na URL." });
     }
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -19,9 +19,9 @@ Responda sempre de forma útil e simpática.
     const result = await model.generateContent(`${PERSONALIDADE}\nUsuário: ${prompt}\nIA:`);
     const resposta = result.response.text();
 
-    res.status(200).json({ resposta });
+    return res.status(200).json({ resposta });
   } catch (error) {
-    console.error("Erro interno:", error.message, error.stack);
-    res.status(500).json({ error: "Erro interno no servidor." });
+    console.error("Erro interno:", error.message);
+    return res.status(500).json({ error: "Erro interno no servidor." });
   }
 }
