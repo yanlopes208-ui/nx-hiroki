@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     }
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "models/gemini-1.5-flash-latest" }); // ✅ atualizado
+    const model = genAI.getGenerativeModel({ model: "models/gemini-2.5-flash" }); // ✅ atualizado
 
     const PERSONALIDADE = `
 Você é uma IA criativa, educada e engraçada. 
