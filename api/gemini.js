@@ -8,13 +8,12 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Faltou o parâmetro 'propmt' na URL." });
     }
 
-    // DEBUG temporário: veja se a chave está vindo
     if (!process.env.GEMINI_API_KEY) {
-      return res.status(500).json({ error: "Chave GEMINI_API_KEY não encontrada no ambiente." });
+      return res.status(500).json({ error: "GEMINI_API_KEY não está configurada no ambiente." });
     }
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "models/gemini-1.5-flash-latest" }); // ✅ atualizado
 
     const PERSONALIDADE = `
 Você é uma IA criativa, educada e engraçada. 
