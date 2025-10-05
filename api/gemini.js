@@ -21,7 +21,7 @@ Responda sempre de forma útil e simpática.
 
     res.status(200).json({ resposta });
   } catch (error) {
-    console.error("Erro interno:", error);
+    console.error("Erro interno:", error.message, error.stack);
     res.status(500).json({ error: "Erro interno no servidor." });
   }
 }
