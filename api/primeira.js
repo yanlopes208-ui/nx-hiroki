@@ -18,7 +18,6 @@ app.get("/api/gemini", async (req, res) => {
   if (!prompt) {
     return res.status(400).json({ error: "Faltou o parâmetro 'prompt' na URL." });
   }
-
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
