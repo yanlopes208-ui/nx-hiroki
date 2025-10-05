@@ -1,10 +1,11 @@
 {
   "name": "gemini-api",
   "version": "1.0.0",
-  "description": "API de IA usando Google Gemini e hospedada na Vercel",
-  "type": "module",
+  "description": "API de inteligência artificial usando Google Gemini e hospedada na Vercel",
   "main": "api/gemini.js",
+  "type": "module",
   "scripts": {
+    "dev": "node api/gemini.js",
     "start": "node api/gemini.js"
   },
   "dependencies": {
