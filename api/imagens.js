@@ -1,5 +1,3 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
 export default async function handler(req, res) {
   try {
     const { imagem } = req.query;
@@ -10,23 +8,28 @@ export default async function handler(req, res) {
       });
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    // Usa a API Lexica para buscar imagens baseadas na descrição
+    const response = await fetch(
+      `https://lexica.art/api/v1/search?q=${encodeURIComponent(imagem)}`
+    );
 
-    // Usa o modelo de geração de imagens do Gemini
-    const model = genAI.getGenerativeModel({ model: "imagen-3.0" });
-
-    // Gera a imagem com base na descrição fornecida
-    const result = await model.generateImage(imagem);
-
-    const imageBase64 = result.imageBase64;
-    if (!imageBase64) {
-      return res.status(500).json({ error: "Erro ao gerar imagem." });
+    if (!response.ok) {
+      return res.status(500).json({ error: "Erro ao conectar com a API de imagens." });
     }
 
-    // Retorna a imagem diretamente no navegador
-    res.setHeader("Content-Type", "image/png");
-    const buffer = Buffer.from(imageBase64, "base64");
-    res.send(buffer);
+    const data = await response.json();
+
+    if (!data.images || data.images.length === 0) {
+      return res.status(404).json({ error: "Nenhuma imagem encontrada para essa descrição." });
+    }
+
+    // Pega a primeira imagem dos resultados
+    const imagemURL = data.images[0].src || data.images[0].imageUrl;
+
+    return res.status(200).json({
+      descricao: imagem,
+      imagem: imagemURL,
+    });
   } catch (error) {
     console.error("Erro ao gerar imagem:", error);
     return res.status(500).json({ error: "Erro interno ao gerar imagem." });
