@@ -12,7 +12,7 @@ error: "Use os parâmetros 'text' (texto a traduzir) e 'to' (idioma de destino, 
 }
 
 try {
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
 const prompt = `Traduza o seguinte texto para ${to} e responda apenas com a tradução pura, sem explicações:\n\n"${text}"`;  
 
