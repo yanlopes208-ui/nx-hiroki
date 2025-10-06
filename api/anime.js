@@ -6,7 +6,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ erro: "Use ?nome=NomeDoAnime" });
     }
 
-    // Consulta à API pública de animes (Jikan - MyAnimeList)
+    // Consulta API pública de animes (Jikan - MyAnimeList)
     const resposta = await fetch(
       `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(nome)}&limit=1`
     );
@@ -22,11 +22,21 @@ export default async function handler(req, res) {
     }
 
     const anime = dados.data[0];
+    const descricaoOriginal = anime.synopsis || "Sem descrição disponível.";
+
+    // Traduz a descrição para português (usando API gratuita do Google Translate)
+    const traducao = await fetch(
+      `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=pt&dt=t&q=${encodeURIComponent(
+        descricaoOriginal
+      )}`
+    );
+    const resultadoTraducao = await traducao.json();
+    const descricaoTraduzida = resultadoTraducao[0][0][0];
 
     // Monta a resposta da API
     return res.status(200).json({
       nome: anime.title,
-      descricao: anime.synopsis || "Sem descrição disponível.",
+      descricao: descricaoTraduzida,
       imagem: anime.images?.jpg?.image_url || anime.images?.webp?.image_url,
     });
   } catch (erro) {
