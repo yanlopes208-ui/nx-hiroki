@@ -90,7 +90,9 @@ export default async function handler(req, res) {
       name: user.name,
       displayName: user.displayName,
       avatar: avatarUrl,
-      description: profileJson.description || "",
+      description: profileJson.description && profileJson.description.trim() !== "" 
+  ? profileJson.description 
+  : "Descrição não definida",
       created: createdFormatted,
       isBanned,
     });
