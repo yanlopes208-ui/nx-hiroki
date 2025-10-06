@@ -39,8 +39,10 @@ export default async function handler(req, res) {
 
     const userId = user.id;
 
-    // Avatar/headshot
-    const avatarRes = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=420x420&format=Png&isCircular=false`);
+    // Avatar completo (corpo inteiro)
+    const avatarRes = await fetch(
+      `https://thumbnails.roblox.com/v1/users/avatar?userIds=${userId}&size=420x420&format=Png&isCircular=false`
+    );
     const avatarJson = await avatarRes.json();
     const avatarUrl = avatarJson.data[0]?.imageUrl || null;
 
@@ -60,7 +62,7 @@ export default async function handler(req, res) {
       id: userId,
       name: user.name,
       displayName: user.displayName,
-      avatar: avatarUrl,
+      avatar: avatarUrl, // avatar completo
       description: profileJson.description || "",
       created: createdFormatted,
       isBanned // true se ban permanente
