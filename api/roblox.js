@@ -5,52 +5,56 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Use ?username=NomeDoUsuario" });
     }
 
-    // Tentar endpoint moderno
-    const userInfoRes = await fetch("https://users.roblox.com/v1/usernames/users", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ usernames: [username], excludeBannedUsers: false }),
-    });
-
-    const userInfoJson = await userInfoRes.json();
-    let user = userInfoJson.data[0] || null;
+    let user = null;
     let isBanned = false;
 
-    // Se não encontrou no endpoint moderno, tentar endpoint legacy (ban permanente provável)
+    // 1️⃣ Endpoint moderno
+    try {
+      const userInfoRes = await fetch("https://users.roblox.com/v1/usernames/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ usernames: [username], excludeBannedUsers: false }),
+      });
+      const userInfoJson = await userInfoRes.json();
+      user = userInfoJson.data[0] || null;
+    } catch {}
+
+    // 2️⃣ Endpoint legacy
     if (!user) {
-      const legacyRes = await fetch(`https://api.roblox.com/users/get-by-username?username=${encodeURIComponent(username)}`);
-      const legacyJson = await legacyRes.json();
-      if (!legacyJson.Id) {
-        // Usuário não encontrado → ban permanente
-        isBanned = true;
-        return res.status(200).json({
-          id: null,
-          name: username,
-          displayName: null,
-          avatar: null,
-          description: null,
-          created: null,
-          isBanned: true
-        });
-      } else {
-        user = { id: legacyJson.Id, name: legacyJson.Username, displayName: legacyJson.Username };
-      }
+      try {
+        const legacyRes = await fetch(`https://api.roblox.com/users/get-by-username?username=${encodeURIComponent(username)}`);
+        const legacyJson = await legacyRes.json();
+        if (!legacyJson.Id) {
+          isBanned = true;
+          return res.status(200).json({
+            id: null,
+            name: username,
+            displayName: null,
+            avatar: null,
+            description: null,
+            created: null,
+            isBanned: true
+          });
+        } else {
+          user = { id: legacyJson.Id, name: legacyJson.Username, displayName: legacyJson.Username };
+        }
+      } catch {}
     }
 
     const userId = user.id;
 
-    // Avatar completo (corpo inteiro)
+    // 3️⃣ Avatar completo
     const avatarRes = await fetch(
       `https://thumbnails.roblox.com/v1/users/avatar?userIds=${userId}&size=420x420&format=Png&isCircular=false`
     );
     const avatarJson = await avatarRes.json();
-    const avatarUrl = avatarJson.data[0]?.imageUrl || null;
+    let avatarUrl = avatarJson.data[0]?.imageUrl || null;
 
-    // Profile
+    // 4️⃣ Profile
     const profileRes = await fetch(`https://users.roblox.com/v1/users/${userId}`);
     const profileJson = await profileRes.json();
 
-    // Formatar created
+    // 5️⃣ Formatar created
     let createdFormatted = "";
     if (profileJson.created) {
       const d = new Date(profileJson.created);
@@ -58,14 +62,24 @@ export default async function handler(req, res) {
       createdFormatted = `${pad(d.getUTCDate())}/${pad(d.getUTCMonth() + 1)}/${d.getUTCFullYear()} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())}`;
     }
 
+    // 6️⃣ Heurística: se avatar é igual ao padrão de conta banida, marca isBanned = true
+    // Exemplo de padrão conhecido (mude se seu teste mostrar outro link)
+    const bannedAvatarPatterns = [
+      "https://tr.rbxcdn.com/180DAY", // padrão antigo
+      "https://tr.rbxcdn.com/30DAY"   // padrão recente
+    ];
+    if (avatarUrl && bannedAvatarPatterns.some(p => avatarUrl.includes(p))) {
+      isBanned = true;
+    }
+
     res.status(200).json({
       id: userId,
       name: user.name,
       displayName: user.displayName,
-      avatar: avatarUrl, // avatar completo
+      avatar: avatarUrl,
       description: profileJson.description || "",
       created: createdFormatted,
-      isBanned // true se ban permanente
+      isBanned
     });
 
   } catch (err) {
