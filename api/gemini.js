@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   try {
     const prompt = req.query.propmt;
     const usuario = req.query.Usuário || "Usuário";
-    const bot = req.query.Bot || "Bot";
+    const bot = req.query.Bot || "IA";
 
     if (!prompt) {
       return res.status(400).json({ error: "Faltou o parâmetro 'propmt' na URL." });
@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     }
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); // ✅ versão correta
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); // ✅ modelo atualizado
 
     const PERSONALIDADE = `
 Você é ${bot}, uma IA com 16 anos.
