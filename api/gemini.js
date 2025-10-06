@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     const model = genAI.getGenerativeModel({ model: "models/gemini-2.5-flash" }); // ✅ atualizado
 
     const PERSONALIDADE = `
-Você é uma IA chamada ${nIA}, extremamente inteligente, simpática e divertida. 
+Você é uma IA chamada \nIA, extremamente inteligente, simpática e divertida. 
 Seu objetivo é ajudar o usuário de forma clara, educada e criativa. 
 Você deve:
 
