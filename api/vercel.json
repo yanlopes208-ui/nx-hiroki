@@ -1,23 +1,13 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "api/gemini.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "api/memes.js",
-      "use": "@vercel/node"
-    }
+    { "src": "api/gemini.js", "use": "@vercel/node" },
+    { "src": "api/memes.js", "use": "@vercel/node" },
+    { "src": "api/tradutor.js", "use": "@vercel/node" }
   ],
   "routes": [
-    {
-      "src": "/api/gemini",
-      "dest": "/api/gemini.js"
-    },
-    {
-      "src": "/api/memes",
-      "dest": "/api/memes.js"
-    }
+    { "src": "/api/gemini", "dest": "/api/gemini.js" },
+    { "src": "/api/memes", "dest": "/api/memes.js" },
+    { "src": "/api/tradutor", "dest": "/api/tradutor.js" }
   ]
 }
