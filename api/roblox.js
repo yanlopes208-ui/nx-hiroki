@@ -62,15 +62,11 @@ export default async function handler(req, res) {
       createdFormatted = `${pad(d.getUTCDate())}/${pad(d.getUTCMonth() + 1)}/${d.getUTCFullYear()} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())}`;
     }
 
-    // 6️⃣ Heurística: se avatar é igual ao padrão de conta banida, marca isBanned = true
-    // Exemplo de padrão conhecido (mude se seu teste mostrar outro link)
-    const bannedAvatarPatterns = [
-      "https://tr.rbxcdn.com/180DAY", // padrão antigo
-      "https://tr.rbxcdn.com/30DAY"   // padrão recente
-    ];
-    if (avatarUrl && bannedAvatarPatterns.some(p => avatarUrl.includes(p))) {
-      isBanned = true;
-    }
+    // 6️⃣ Heurística aprimorada: detectar avatar de conta banida
+const bannedAvatarPatterns = ["180DAY", "30DAY"];
+if (avatarUrl && bannedAvatarPatterns.some(p => avatarUrl.includes(p))) {
+  isBanned = true;
+}
 
     res.status(200).json({
       id: userId,
