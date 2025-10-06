@@ -5,15 +5,13 @@
     { "src": "api/memes.js", "use": "@vercel/node" },
     { "src": "api/tradutor.js", "use": "@vercel/node" },
     { "src": "api/roblox.js", "use": "@vercel/node" },
-    { "src": "api/anime.js", "use": "@vercel/node" },
-    { "src": "api/imagens.js", "use": "@vercel/node" }
+    { "src": "api/anime.js", "use": "@vercel/node" }
   ],
   "routes": [
     { "src": "/api/gemini", "dest": "/api/gemini.js" },
     { "src": "/api/memes", "dest": "/api/memes.js" },
     { "src": "/api/tradutor", "dest": "/api/tradutor.js" },
     { "src": "/api/roblox", "dest": "/api/roblox.js" },
-    { "src": "/api/anime", "dest": "/api/anime.js" },
-    { "src": "/api/imagens", "dest": "/api/imagens.js" }
+    { "src": "/api/anime", "dest": "/api/anime.js" }
   ]
 }
