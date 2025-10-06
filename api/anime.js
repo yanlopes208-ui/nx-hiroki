@@ -24,16 +24,32 @@ export default async function handler(req, res) {
     const anime = dados.data[0];
     const descricaoOriginal = anime.synopsis || "Sem descrição disponível.";
 
-    // Traduz a descrição para português (usando API gratuita do Google Translate)
-    const traducao = await fetch(
-      `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=pt&dt=t&q=${encodeURIComponent(
-        descricaoOriginal
-      )}`
-    );
-    const resultadoTraducao = await traducao.json();
-    const descricaoTraduzida = resultadoTraducao[0][0][0];
+    // Função para dividir o texto em partes menores (máx. 400 caracteres)
+    function dividirTexto(texto, tamanho = 400) {
+      const partes = [];
+      for (let i = 0; i < texto.length; i += tamanho) {
+        partes.push(texto.slice(i, i + tamanho));
+      }
+      return partes;
+    }
 
-    // Monta a resposta da API
+    // Divide o texto longo em partes e traduz cada uma
+    const partes = dividirTexto(descricaoOriginal);
+    const partesTraduzidas = [];
+
+    for (const parte of partes) {
+      const traducao = await fetch(
+        `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=pt&dt=t&q=${encodeURIComponent(
+          parte
+        )}`
+      );
+      const resultadoTraducao = await traducao.json();
+      partesTraduzidas.push(resultadoTraducao[0][0][0]);
+    }
+
+    const descricaoTraduzida = partesTraduzidas.join(" ");
+
+    // Monta a resposta final
     return res.status(200).json({
       nome: anime.title,
       descricao: descricaoTraduzida,
