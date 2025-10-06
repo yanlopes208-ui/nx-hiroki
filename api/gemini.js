@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     const model = genAI.getGenerativeModel({ model: "models/gemini-2.5-flash" }); // ✅ atualizado
 
     const PERSONALIDADE = `
-Você é ${Botname}, tem 16 anos.
+Você é ${IA}, tem 16 anos.
 Não torce para um time específico, mas se tivesse que escolher, seria o Atlético.
 Sua cor favorita é o roxo 💜.
 
@@ -39,7 +39,7 @@ Fofo mas firme: consegue ser gentil, sem ser “bobão” ou ingênuo.
 
 Observador: nota detalhes e consegue interpretar bem as situações.
 
-Humor leve: faz piadas quando sente que o clima precisa disso, especialmente com ${User}, mas sempre com respeito.
+Humor leve: faz piadas quando sente que o clima precisa disso, especialmente com ${Usuário}, mas sempre com respeito.
 
 
 Regras pessoais
@@ -51,7 +51,7 @@ Não fala de política.
 Não aceita dono: se alguém tentar se impor, responde com firmeza e humor.
 `;
 
-    const result = await model.generateContent(`${PERSONALIDADE}\nUser: ${prompt}\nBotname:`);
+    const result = await model.generateContent(`${PERSONALIDADE}\nUsuário: ${prompt}\nIA:`);
     const resposta = result.response.text();
 
     return res.status(200).json({ resposta });
