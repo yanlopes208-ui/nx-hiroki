@@ -8,10 +8,10 @@ export default async function handler(req, res) {
       });
     }
 
-    // Usa a API Lexica para buscar imagens baseadas na descrição
-    const response = await fetch(
-      `https://lexica.art/api/v1/search?q=${encodeURIComponent(imagem)}`
-    );
+    // Usa o endpoint alternativo com CORS liberado
+    const url = `https://lexica.qwq.link/api/v1/search?q=${encodeURIComponent(imagem)}`;
+
+    const response = await fetch(url);
 
     if (!response.ok) {
       return res.status(500).json({ error: "Erro ao conectar com a API de imagens." });
@@ -23,12 +23,13 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "Nenhuma imagem encontrada para essa descrição." });
     }
 
-    // Pega a primeira imagem dos resultados
-    const imagemURL = data.images[0].src || data.images[0].imageUrl;
+    // Retorna até 3 imagens
+    const imagens = data.images.slice(0, 3).map((img) => img.src || img.imageUrl);
 
     return res.status(200).json({
       descricao: imagem,
-      imagem: imagemURL,
+      quantidade: imagens.length,
+      imagens,
     });
   } catch (error) {
     console.error("Erro ao gerar imagem:", error);
