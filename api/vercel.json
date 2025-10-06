@@ -4,12 +4,20 @@
     {
       "src": "api/gemini.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "api/memes.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
+      "src": "/api/gemini",
       "dest": "/api/gemini.js"
+    },
+    {
+      "src": "/api/memes",
+      "dest": "/api/memes.js"
     }
   ]
 }
