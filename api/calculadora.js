@@ -51,12 +51,16 @@ Responda *apenas* neste formato JSON puro, sem usar crases, markdown ou explica�
       };
     }
 
-    // Monta o novo formato de resposta
-    const formatado = {
-      "calc/result": `**Cálculo**\n${json.calculo}\n\n**Resposta**\n${json.resultado}`
-    };
+    // ✅ Adiciona o campo calc/result no formato solicitado
+    json["calc/result"] = `
+**Cálculo**
+${json.calculo}
 
-    return res.status(200).json(formatado);
+**Resultado**
+${json.resultado}
+    `.trim();
+
+    return res.status(200).json(json);
 
   } catch (err) {
     console.error(err);
