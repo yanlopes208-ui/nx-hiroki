@@ -2,13 +2,34 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default async function handler(req, res) {
   try {
-    const { calcular } = req.query;
+    let { calcular } = req.query;
 
     if (!calcular) {
       return res.status(400).json({
         error: "Use ?calcular=expressão (ex: ?calcular=4x^2 ou ?calcular=2+2)"
       });
     }
+
+    // 🧠 Normaliza a expressão recebida:
+    calcular = calcular
+      // Multiplicação: ponto, vírgula, x, ×
+      .replace(/(\d+)\s*[\.,x×]\s*(\d+)/gi, "$1 * $2")
+      // Divisão: ÷, :
+      .replace(/(\d+)\s*[÷:]\s*(\d+)/gi, "$1 / $2")
+      // Potenciação: expoentes ² ³
+      .replace(/(\d+)\s*²/g, "$1^2")
+      .replace(/(\d+)\s*³/g, "$1^3")
+      // Raiz quadrada: √9 → sqrt(9)
+      .replace(/√\s*(\d+)/g, "sqrt($1)")
+      // Porcentagem: 50% → 0.5
+      .replace(/(\d+)\s*%/g, (match, p1) => `${parseFloat(p1) / 100}`)
+      // Constante pi: π ou pi → 3.14159
+      .replace(/π|pi/gi, "3.14159")
+      // Constante e → 2.71828
+      .replace(/\be\b/g, "2.71828")
+      // Remove espaços extras
+      .replace(/\s+/g, " ")
+      .trim();
 
     // Inicia o modelo Gemini 2.5 Flash
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -51,7 +72,7 @@ Responda *apenas* neste formato JSON puro, sem usar crases, markdown ou explica�
       };
     }
 
-    // ✅ Adiciona o campo calc_result no formato solicitado (sem barra)
+    // ✅ Adiciona o campo calc_result no formato solicitado
     json.calc_result = `
 **Cálculo**
 ${json.calculo}
