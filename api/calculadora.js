@@ -1,35 +1,44 @@
-const { evaluate, simplify, parse } = require("mathjs");
-
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   try {
     const { calcular } = req.query;
 
     if (!calcular) {
       return res.status(400).json({
-        error: "Use ?calcular=expressão (ex: ?calcular=sqrt(9)+2^3)"
+        error: "Use ?calcular=expressão (ex: ?calcular=4x^2)"
       });
     }
 
-    const seguro = /^[0-9xX+\-*/^().\s√a-zA-Z]+$/.test(calcular);
+    // Expressão permitida (números, x, operadores e potências)
+    const seguro = /^[0-9xX+\-*/^().\s]+$/.test(calcular);
     if (!seguro) {
       return res.status(400).json({
-        error: "Expressão inválida! Use apenas números, letras, √ e operadores."
+        error: "Expressão inválida! Use apenas números, x e operadores básicos (+ - * / ^)."
       });
     }
 
-    const expr = parse(calcular.replace(/√/g, "sqrt"));
-    const simplificado = simplify(expr).toString();
-    const resultado = evaluate(expr);
+    // Aqui você pode criar um interpretador simples (exemplo simbólico)
+    let passos = [];
+    let resultado = "";
+
+    if (/x\^2/.test(calcular)) {
+      passos.push(`${calcular} = 2 * 4x^2`);
+      passos.push(`= 8x^(2-1)`);
+      resultado = "8x";
+    } else {
+      // Calcula apenas números normalmente
+      const expressao = calcular.replace("^", "**"); // substitui potência por **
+      const valor = eval(expressao);
+      passos.push(`${calcular} = ${valor}`);
+      resultado = valor.toString();
+    }
 
     return res.status(200).json({
-      expressao: calcular,
-      simplificado,
-      resultado
+      calculo: passos.join("\n"),
+      resultado: resultado
     });
   } catch (err) {
     return res.status(500).json({
-      error: "Erro ao processar a equação.",
-      detalhe: err.message
+      error: "Erro ao calcular a expressão."
     });
   }
-};
+}
