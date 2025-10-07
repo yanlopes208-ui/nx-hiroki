@@ -51,7 +51,12 @@ Responda *apenas* neste formato JSON puro, sem usar crases, markdown ou explica√
       };
     }
 
-    return res.status(200).json(json);
+    // Monta o novo formato de resposta
+    const formatado = {
+      "calc/result": `**C√°lculo**\n${json.calculo}\n\n**Resposta**\n${json.resultado}`
+    };
+
+    return res.status(200).json(formatado);
 
   } catch (err) {
     console.error(err);
