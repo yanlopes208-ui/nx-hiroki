@@ -10,31 +10,45 @@ export default async function handler(req, res) {
       });
     }
 
-    // Inicia o modelo Gemini
+    // Inicia o modelo Gemini 2.5 Flash
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-    // Prompt pedindo o cálculo
+    // Prompt instruindo o modelo a retornar JSON puro
     const prompt = `
-    Resolva passo a passo a expressão matemática abaixo.
-    Retorne o resultado final simplificado.
-    Expressão: ${calcular}
+Resolva passo a passo a expressão matemática abaixo e retorne o resultado final.
+Se a expressão envolver letras (como x), resolva simbolicamente se possível.
+Expressão: ${calcular}
 
-    Responda estritamente neste formato JSON:
-    {
-      "calculo": "passos da resolução",
-      "resultado": "resultado final"
-    }`;
+Responda *apenas* neste formato JSON puro, sem usar crases, markdown ou explicações extras:
+
+{
+  "calculo": "explique passo a passo aqui",
+  "resultado": "resultado final aqui"
+}
+`;
 
     const resposta = await model.generateContent(prompt);
     const texto = resposta.response.text();
 
-    // Tenta converter o JSON retornado
+    // Remove blocos de código ou markdown que o Gemini possa incluir
     let json;
     try {
-      json = JSON.parse(texto);
+      const textoLimpo = texto
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .trim();
+
+      json = JSON.parse(textoLimpo);
     } catch {
       json = { calculo: texto, resultado: "Erro ao formatar resultado" };
+    }
+
+    if (!json.calculo || !json.resultado) {
+      json = {
+        calculo: texto,
+        resultado: "Erro ao interpretar resposta do modelo."
+      };
     }
 
     return res.status(200).json(json);
