@@ -51,8 +51,8 @@ Responda *apenas* neste formato JSON puro, sem usar crases, markdown ou explica�
       };
     }
 
-    // ✅ Adiciona o campo calc/result no formato solicitado
-    json["calc/result"] = `
+    // ✅ Adiciona o campo calc_result no formato solicitado (sem barra)
+    json.calc_result = `
 **Cálculo**
 ${json.calculo}
 
