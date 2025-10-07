@@ -1,7 +1,6 @@
-// /pages/api/calculadora.js
-import { evaluate, simplify, parse } from "mathjs";
+const { evaluate, simplify, parse } = require("mathjs");
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   try {
     const { calcular } = req.query;
 
@@ -11,7 +10,6 @@ export default async function handler(req, res) {
       });
     }
 
-    // Verifica se é segura (sem código malicioso)
     const seguro = /^[0-9xX+\-*/^().\s√a-zA-Z]+$/.test(calcular);
     if (!seguro) {
       return res.status(400).json({
@@ -19,7 +17,6 @@ export default async function handler(req, res) {
       });
     }
 
-    // Tenta simplificar e calcular
     const expr = parse(calcular.replace(/√/g, "sqrt"));
     const simplificado = simplify(expr).toString();
     const resultado = evaluate(expr);
@@ -31,7 +28,8 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     return res.status(500).json({
-      error: "Erro ao processar a equação."
+      error: "Erro ao processar a equação.",
+      detalhe: err.message
     });
   }
-}
+};
