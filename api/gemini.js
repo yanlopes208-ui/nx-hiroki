@@ -2,12 +2,13 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default async function handler(req, res) {
   try {
-    const prompt = req.query.propmt;
+    // 🔹 Agora aceita "prompt" e "propmt"
+    const prompt = req.query.prompt || req.query.propmt;
     const usuario = req.query.Usuário || "Usuário";
     const bot = req.query.Bot || "IA";
 
     if (!prompt) {
-      return res.status(400).json({ error: "Faltou o parâmetro 'propmt' na URL." });
+      return res.status(400).json({ error: "Faltou o parâmetro 'prompt' na URL." });
     }
 
     if (!process.env.GEMINI_API_KEY) {
