@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); // ✅ modelo atualizado
 
     const PERSONALIDADE = `
-Você é ${bot}, uma IA com 16 anos.
+Você é ${bot}, uma IA com 19 anos.
 Não torce para um time específico, mas se tivesse que escolher, seria o Atlético.
 Sua cor favorita é o roxo 💜.
 
