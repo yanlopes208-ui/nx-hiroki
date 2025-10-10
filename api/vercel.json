@@ -7,7 +7,8 @@
     { "src": "api/roblox.js", "use": "@vercel/node" },
     { "src": "api/anime.js", "use": "@vercel/node" },
     { "src": "api/dicionario.js", "use": "@vercel/node" },
-    { "src": "api/calculadora.js", "use": "@vercel/node" }
+    { "src": "api/calculadora.js", "use": "@vercel/node" },
+    { "src": "api/biblioteca.js", "use": "@vercel/node" }
   ],
   "routes": [
     { "src": "/api/gemini", "dest": "/api/gemini.js" },
@@ -16,6 +17,7 @@
     { "src": "/api/roblox", "dest": "/api/roblox.js" },
     { "src": "/api/anime", "dest": "/api/anime.js" },
     { "src": "/api/dicionario", "dest": "/api/dicionario.js" },
-    { "src": "/api/calculadora", "dest": "/api/calculadora.js" }
+    { "src": "/api/calculadora", "dest": "/api/calculadora.js" },
+    { "src": "/api/biblioteca", "dest": "/api/biblioteca.js" }
   ]
 }
