@@ -25,8 +25,11 @@ export default async function handler(req, res) {
       Me dê as seguintes informações sobre "${text}" em formato JSON:
       {
         "nome": "Nome do filme ou série",
-        "descricao": "Resumo curto e interessante da história (em português)",
-        "imagem": "Link de uma imagem ou pôster do filme/série (em alta qualidade)"
+        "descricao": "Um resumo curto e interessante da história em português, seguido por informações adicionais como:
+        - Gênero
+        - Avaliação média (nota de 0 a 10)
+        - Criado por
+        - Elenco principal (até 5 nomes)"
       }
       Responda apenas o JSON puro.
     `;
@@ -41,25 +44,6 @@ export default async function handler(req, res) {
     } catch {
       const jsonLimpo = resposta.match(/\{[\s\S]*\}/);
       data = jsonLimpo ? JSON.parse(jsonLimpo[0]) : { error: "Falha ao gerar JSON válido." };
-    }
-
-    // Função pra validar URL de imagem
-    const urlValida = (url) => /^https?:\/\/\S+\.(jpg|jpeg|png|webp|gif)$/i.test(url);
-
-    // Se a imagem não for válida, tenta pedir uma nova pro Gemini
-    if (!data.imagem || !urlValida(data.imagem)) {
-      const fixPrompt = `
-        Me forneça um link direto (https) de uma imagem ou pôster oficial em alta qualidade de "${text}".
-        Responda apenas o link.
-      `;
-      const fixResult = await model.generateContent(fixPrompt);
-      const imagemCorrigida = fixResult.response.text().trim();
-
-      if (urlValida(imagemCorrigida)) {
-        data.imagem = imagemCorrigida;
-      } else {
-        data.imagem = "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
-      }
     }
 
     res.status(200).json(data);
