@@ -25,15 +25,15 @@ Código original:
 ${code}
 `;
 
-    // Gera resposta
+    // Gera a resposta
     const result = await model.generateContent(prompt);
     const resposta = result.response.text();
 
+    // Retorna em formato JSON (sem o modelo_usado)
     return res.status(200).json({
       original: code,
       convertido: resposta.trim(),
-      biblioteca_destino: to,
-      modelo_usado: "gemini-2.5-flash"
+      biblioteca_destino: to
     });
 
   } catch (e) {
