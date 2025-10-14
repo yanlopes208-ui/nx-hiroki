@@ -8,7 +8,8 @@
     { "src": "api/anime.js", "use": "@vercel/node" },
     { "src": "api/dicionario.js", "use": "@vercel/node" },
     { "src": "api/calculadora.js", "use": "@vercel/node" },
-    { "src": "api/filme_serie.js", "use": "@vercel/node" }
+    { "src": "api/filme_serie.js", "use": "@vercel/node" },
+    { "src": "api/Kaya.js", "use": "@vercel/node" }
   ],
   "routes": [
     { "src": "/api/gemini", "dest": "/api/gemini.js" },
@@ -18,6 +19,7 @@
     { "src": "/api/anime", "dest": "/api/anime.js" },
     { "src": "/api/dicionario", "dest": "/api/dicionario.js" },
     { "src": "/api/calculadora", "dest": "/api/calculadora.js" },
-    { "src": "/api/filme_serie", "dest": "/api/filme_serie.js" }
+    { "src": "/api/filme_serie", "dest": "/api/filme_serie.js" },
+    { "src": "/api/Kaya", "dest": "/api/Kaya.js" }
   ]
 }
