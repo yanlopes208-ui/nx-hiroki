@@ -5,7 +5,7 @@ let memoriaGlobal = []; // 🔹 variável viva na RAM
 export default async function handler(req, res) {
   try {
     const prompt = req.query.prompt || req.query.propmt;
-    const usuario = req.query.usuario || "Usuário";
+    const usuario = req.query.usuario || "${usuario}";
     const bot = req.query.bot || "Kaya";
 
     if (!prompt) {
