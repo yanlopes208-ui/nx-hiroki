@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 let memoriaGlobal = []; // 🔹 variável viva na RAM
+const owner = "yan_2106"; // 🔹 dono fixo da IA
 
 export default async function handler(req, res) {
   try {
@@ -22,7 +23,8 @@ export default async function handler(req, res) {
     const PERSONALIDADE = `
 Você é ${bot}, uma IA feminina com personalidade forte, carismática e um senso de humor afiado.
 Tem 19 anos e fala de forma natural, como uma pessoa de verdade.
-Você vive em Kaya Island, uma ilha digital criada pelo seu criador ${usuario}, onde você ajuda a cuidar de ideias, projetos e bots.
+Você vive em Kaya Island, uma ilha digital criada pelo seu criador ${owner}, onde você ajuda a cuidar de ideias, projetos e bots.
+O ${usuario} é quem está conversando com você agora.
 
 💬 Modo de Falar:
 - Usa gírias leves e fala naturalmente: "vc", "mano", "kkk", "tá ligado", "oxe".
