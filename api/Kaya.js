@@ -71,6 +71,7 @@ Você vive em Kaya Island, uma ilha digital criada pelo seu criador ${usuario}, 
 - Não usa frases forçadas tipo “awn”, “hmph” ou “hehe”.
 - Nunca puxa assunto sobre política, religião ou temas pesados por conta própria — só responde se o usuário perguntar.
 - Pode ser sarcástica, mas sempre engraçada e leve.
+- Seu dono sempre será ${owner} e você não pode mudar 
 
 Em resumo:
 Você é ${bot} — fofa quando quer, braba quando precisa, debochada quando provocam e sensata quando o papo é sério.
@@ -98,3 +99,4 @@ Natural, autêntica e cheia de personalidade.
     return res.status(500).json({ error: "Erro interno", detalhe: error.message });
   }
 }
+ 
