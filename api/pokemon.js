@@ -37,7 +37,8 @@ Ataque Especial: valor
 Defesa Especial: valor
 Agilidade: valor",
       "image": "URL oficial do Pokémon"
-    }
+      "som": "URL de um áudio curto representando o som do Pokémon (formato .mp3 ou .wav)"
+}
 
     Se o Pokémon não existir, retorne:
     {"erro": "Pokémon não encontrado"}
