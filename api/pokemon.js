@@ -11,33 +11,35 @@ export default async function handler(req, res) {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash"
+      model: "gemini-1.5-flash-002"
     });
 
     const prompt = `
-    Responda SOMENTE com JSON puro. Sem texto extra.
+    Responda SOMENTE com JSON puro.
+    SEM texto adicional.
+    SEM markdown.
+    SEM comentários fora do JSON.
 
-    Gere informações do Pokémon "${poke}" no formato:
+    Gere informações sobre o Pokémon "${poke}" EXATAMENTE nesse formato:
 
     {
-      "nome": "",
-      "curiosidade": "",
-      "tipo": [],
-      "especie": "",
-      "habilidades": [],
-      "evolucao": [],
-      "status": {
-        "HP": 0,
-        "Attack": 0,
-        "Defense": 0,
-        "AttackSpecial": 0,
-        "DefenseSpecial": 0,
-        "Agility": 0
-      },
-      "image": ""
+      "nome": "// Nome do Pokémon",
+      "curiosidade": "// Curiosidade sobre o Pokémon",
+      "tipo": "/= Tipo(s) do Pokémon",
+      "especie": "// Espécie do Pokémon",
+      "habilidades": "// Habilidades (incluindo habilidade oculta, se existir)",
+      "evolucao": "// Evoluções ou o nome do Pokémon",
+      "status": "
+HP: valor
+Ataque: valor
+Defesa: valor
+Ataque Especial: valor
+Defesa Especial: valor
+Agilidade: valor",
+      "image": "URL oficial do Pokémon"
     }
 
-    Se o Pokémon não existir:
+    Se o Pokémon não existir, retorne:
     {"erro": "Pokémon não encontrado"}
     `;
 
@@ -45,13 +47,11 @@ export default async function handler(req, res) {
 
     let resposta = result.response.text();
 
-    // remove ```json , ``` e espaços quebrados
+    // Remove blocos de código ```json
     resposta = resposta.replace(/```json/g, "").replace(/```/g, "").trim();
 
-    let jsonFinal;
-
     try {
-      jsonFinal = JSON.parse(resposta);
+      return res.json(JSON.parse(resposta));
     } catch {
       return res.json({
         erro: "Resposta inválida do Gemini",
@@ -59,10 +59,8 @@ export default async function handler(req, res) {
       });
     }
 
-    res.status(200).json(jsonFinal);
-
   } catch (e) {
-    res.status(500).json({
+    return res.json({
       erro: "Erro interno",
       detalhe: e.message
     });
