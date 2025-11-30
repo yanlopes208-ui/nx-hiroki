@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default async function handler(req, res) {
-  const poke = req.query.poke;
+  const poke = req.query.poke?.toLowerCase();
 
   if (!poke) {
     return res.json({ erro: "Use ?poke=nomeDoPokemon" });
@@ -11,8 +11,11 @@ export default async function handler(req, res) {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash"
+      model: "gemini-1.5-flash-002"
     });
+
+    // URL 2D oficial da PokéAPI
+    const sprite2D = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${poke}.png`;
 
     const prompt = `
     Responda SOMENTE com JSON puro.
@@ -25,7 +28,7 @@ export default async function handler(req, res) {
     {
       "nome": "// Nome do Pokémon",
       "curiosidade": "// Curiosidade sobre o Pokémon",
-      "tipo": "/= Tipo(s) do Pokémon",
+      "tipo": "// Tipo(s) do Pokémon",
       "especie": "// Espécie do Pokémon",
       "habilidades": "// Habilidades (incluindo habilidade oculta, se existir)",
       "evolucao": "// Evoluções ou o nome do Pokémon",
@@ -36,7 +39,7 @@ Defesa: valor
 Ataque Especial: valor
 Defesa Especial: valor
 Agilidade: valor",
-      "image": "URL oficial do Pokémon"
+      "image": "${sprite2D}"
     }
 
     Se o Pokémon não existir, retorne:
@@ -47,7 +50,6 @@ Agilidade: valor",
 
     let resposta = result.response.text();
 
-    // Remove blocos de código ```json
     resposta = resposta.replace(/```json/g, "").replace(/```/g, "").trim();
 
     try {
