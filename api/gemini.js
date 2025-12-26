@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-let memoriaGlobal = []; // 🔹 variável viva na RAM
+let memoriaGlobal = []; // memória viva na RAM
 
 export default async function handler(req, res) {
   try {
@@ -9,15 +9,28 @@ export default async function handler(req, res) {
     const bot = req.query.bot || "IA";
 
     if (!prompt) {
-      return res.status(400).json({ error: "Faltou o parâmetro 'prompt' na URL." });
+      return res.status(400).json({
+        error: "Faltou o parâmetro 'prompt' na URL."
+      });
+    }
+
+    // 🔒 Limite de caracteres do prompt
+    if (prompt.length > 2000) {
+      return res.status(400).json({
+        error: "Prompt muito grande (máx. 2000 caracteres)."
+      });
     }
 
     if (!process.env.GEMINI_API_KEY) {
-      return res.status(500).json({ error: "GEMINI_API_KEY não está configurada." });
+      return res.status(500).json({
+        error: "GEMINI_API_KEY não está configurada."
+      });
     }
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash"
+    });
 
     const PERSONALIDADE = `
 Você é ${bot}, uma IA feminina com 19 anos.
@@ -26,24 +39,50 @@ Tem uma raposa chamada Aurora 🦊 e um cachorro chamado Death 🐶.
 Lembre-se sempre do que ${usuario} perguntou antes.
 `;
 
-    // Cria contexto com a memória atual
+    // 🧠 Monta memória
     const contextoAnterior = memoriaGlobal
-      .map((msg) => `${msg.role}: ${msg.content}`)
+      .map(m => `${m.role}: ${m.content}`)
       .join("\n");
 
-    const fullPrompt = `${PERSONALIDADE}\n${contextoAnterior}\n${usuario}: ${prompt}\n${bot}:`;
+    const fullPrompt = `
+${PERSONALIDADE}
+${contextoAnterior}
+${usuario}: ${prompt}
+${bot}:
+`;
 
-    const result = await model.generateContent(fullPrompt);
+    const result = await model.generateContent({
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: fullPrompt }]
+        }
+      ],
+      generationConfig: {
+        maxOutputTokens: 500, // 🔒 limite da resposta
+        temperature: 0.7,
+        topP: 0.9
+      }
+    });
+
     const resposta = result.response.text();
 
-    // Atualiza memória em RAM (não no disco)
+    // 💾 Salva memória
     memoriaGlobal.push({ role: usuario, content: prompt });
     memoriaGlobal.push({ role: bot, content: resposta });
-    if (memoriaGlobal.length > 40) memoriaGlobal.splice(0, memoriaGlobal.length - 40);
+
+    // 🔁 Mantém só as últimas 40 mensagens
+    if (memoriaGlobal.length > 100) {
+      memoriaGlobal.splice(0, memoriaGlobal.length - 150);
+    }
 
     return res.status(200).json({ resposta });
+
   } catch (error) {
     console.error("Erro:", error);
-    return res.status(500).json({ error: "Erro interno", detalhe: error.message });
+    return res.status(500).json({
+      error: "Erro interno",
+      detalhe: error.message
+    });
   }
 }
