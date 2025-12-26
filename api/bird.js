@@ -39,7 +39,7 @@ export default function handler(req, res) {
     "https://cdn.discordapp.com/attachments/1393626963490373632/1412540435573772308/images_-_2025-09-02T175051.621.jpg?ex=68e42bcb&is=68e2da4b&hm=bf7f12097e87e62b9d00100e11882dda0236f399c743872e04274bcf1cb4416f&"
   ];
 
-  const randomMeme = memes[Math.floor(Math.random() * memes.length)];
+  const randomBird = memes[Math.floor(Math.random() * memes.length)];
 
   res.status(200).json({
     author: "GPT Meme API",
