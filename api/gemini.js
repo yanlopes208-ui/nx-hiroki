@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-let memoriaGlobal = []; // memória viva na RAM
+const memorias = {}; // memória por usuário
+const LIMITE_MEMORIA = 150;
 
 export default async function handler(req, res) {
   try {
@@ -14,7 +15,6 @@ export default async function handler(req, res) {
       });
     }
 
-    // 🔒 Limite de caracteres do prompt
     if (prompt.length > 2000) {
       return res.status(400).json({
         error: "Prompt muito grande (máx. 2000 caracteres)."
@@ -25,6 +25,10 @@ export default async function handler(req, res) {
       return res.status(500).json({
         error: "GEMINI_API_KEY não está configurada."
       });
+    }
+
+    if (!memorias[usuario]) {
+      memorias[usuario] = [];
     }
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -39,14 +43,14 @@ Tem uma raposa chamada Aurora 🦊 e um cachorro chamado Death 🐶.
 Lembre-se sempre do que ${usuario} perguntou antes.
 `;
 
-    // 🧠 Monta memória
-    const contextoAnterior = memoriaGlobal
+    const contextoAnterior = memorias[usuario]
       .map(m => `${m.role}: ${m.content}`)
       .join("\n");
 
     const fullPrompt = `
 ${PERSONALIDADE}
 ${contextoAnterior}
+
 ${usuario}: ${prompt}
 ${bot}:
 `;
@@ -59,7 +63,7 @@ ${bot}:
         }
       ],
       generationConfig: {
-        maxOutputTokens: 500, // 🔒 limite da resposta
+        maxOutputTokens: 500,
         temperature: 0.7,
         topP: 0.9
       }
@@ -67,13 +71,15 @@ ${bot}:
 
     const resposta = result.response.text();
 
-    // 💾 Salva memória
-    memoriaGlobal.push({ role: usuario, content: prompt });
-    memoriaGlobal.push({ role: bot, content: resposta });
+    // salva memória
+    memorias[usuario].push({ role: usuario, content: prompt });
+    memorias[usuario].push({ role: bot, content: resposta });
 
-    // 🔁 Mantém só as últimas 150 mensagens
-    if (memoriaGlobal.length > 100) {
-      memoriaGlobal.splice(0, memoriaGlobal.length - 150);
+    if (memorias[usuario].length > LIMITE_MEMORIA) {
+      memorias[usuario].splice(
+        0,
+        memorias[usuario].length - LIMITE_MEMORIA
+      );
     }
 
     return res.status(200).json({ resposta });
