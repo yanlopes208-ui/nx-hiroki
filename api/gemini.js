@@ -71,7 +71,7 @@ ${bot}:
     memoriaGlobal.push({ role: usuario, content: prompt });
     memoriaGlobal.push({ role: bot, content: resposta });
 
-    // 🔁 Mantém só as últimas 40 mensagens
+    // 🔁 Mantém só as últimas 75 mensagens
     if (memoriaGlobal.length > 100) {
       memoriaGlobal.splice(0, memoriaGlobal.length - 150);
     }
