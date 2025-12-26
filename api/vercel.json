@@ -11,7 +11,7 @@
     { "src": "api/filme_serie.js", "use": "@vercel/node" },
     { "src": "api/Kaya.js", "use": "@vercel/node" },
     { "src": "api/pokemon.js", "use": "@vercel/node" },
-    { "src": "api/bird.js", "use"; "@vercel/node" }
+    { "src": "api/bird.js", "use": "@vercel/node" }
   ],
   "routes": [
     { "src": "/api/gemini", "dest": "/api/gemini.js" },
