@@ -28,6 +28,6 @@
     { "src": "/api/pokemon", "dest": "/api/pokemon.js" },
     { "src": "/api/birds", "dest": "/api/birds.js" },
     { "src": "/api/dogs", "dest": "/api/dogs.js" },
-    { "src": "/api/cats", "dest": "/api/cats.js" 
+    { "src": "/api/cats", "dest": "/api/cats.js" }
   ]
 }
