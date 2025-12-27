@@ -8,6 +8,6 @@ export default function handler(req, res) {
 
   res.status(200).json({
     author: "Pássaros Random",
-    imagem: randomBird
+    imagem: randomCat
   });
 }
