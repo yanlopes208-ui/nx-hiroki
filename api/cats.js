@@ -1,10 +1,10 @@
 
 export default function handler(req, res) {
-  const birds = [
+  const cats = [
 
       ];
 
-  const randomBird = cats[Math.floor(Math.random() * cats.length)];
+  const randomCat = cats[Math.floor(Math.random() * cats.length)];
 
   res.status(200).json({
     author: "Gatos Random",
