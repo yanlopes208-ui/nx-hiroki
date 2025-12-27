@@ -12,7 +12,8 @@
     { "src": "api/Kaya.js", "use": "@vercel/node" },
     { "src": "api/pokemon.js", "use": "@vercel/node" },
     { "src": "api/birds.js", "use": "@vercel/node" },
-    { "src": "api/dogs.js", "use": "@veecel/node" }
+    { "src": "api/dogs.js", "use": "@vercel/node" },
+    { "src": "api/cats.js", "use": "@vercel/node" }
   ],
   "routes": [
     { "src": "/api/gemini", "dest": "/api/gemini.js" },
@@ -26,6 +27,7 @@
     { "src": "/api/Kaya", "dest": "/api/Kaya.js" },
     { "src": "/api/pokemon", "dest": "/api/pokemon.js" },
     { "src": "/api/birds", "dest": "/api/birds.js" },
-    { "src": "/api/dogs", "dest": "/api/dogs.js" }
+    { "src": "/api/dogs", "dest": "/api/dogs.js" },
+    { "src": "/api/cats", "dest": "/api/cats.js" }
   ]
 }
