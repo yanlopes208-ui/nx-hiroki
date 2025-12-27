@@ -17,7 +17,21 @@ export default function handler(req, res) {
     "https://cdn.discordapp.com/attachments/1417374543609204866/1454247145531248671/images_26.jpg?ex=695064b2&is=694f1332&hm=67ee93096a0af9e9444d1aad157a422593aebb6a05dda6ca417d1b7934f326a1&",
     "https://cdn.discordapp.com/attachments/1417374543609204866/1454247145954607177/images_27.jpg?ex=695064b2&is=694f1332&hm=6ffddd1768d34c2d234b4bd789c341aa68d139f816e9b88868deb2f82ab1a1b1&",
     "https://cdn.discordapp.com/attachments/1417374543609204866/1454247146294607982/images_28.jpg?ex=695064b2&is=694f1332&hm=749a99fbd29af04633383bace50a9ed79a67f27ecce2457a9f252041e953e040&",
-    "https://cdn.discordapp.com/attachments/1417374543609204866/1454247147158376478/images_29.jpg?ex=695064b2&is=694f1332&hm=9c827f76b65e5f370991dd90f0b08e2593d4eee350e3bd2d96406fbe57ad031b&"
+    "https://cdn.discordapp.com/attachments/1417374543609204866/1454247147158376478/images_29.jpg?ex=695064b2&is=694f1332&hm=9c827f76b65e5f370991dd90f0b08e2593d4eee350e3bd2d96406fbe57ad031b&",
+    "https://cdn.discordapp.com/attachments/1417374543609204866/1454269985730859049/images_32.jpg?ex=695079f7&is=694f2877&hm=712d1bed5352cde1e65b07b9db2743069ecbe73eb16fec3598773bb8f1a39a93&",
+    "https://cdn.discordapp.com/attachments/1417374543609204866/1454269986078982245/images_33.jpg?ex=695079f7&is=694f2877&hm=c2241649d0e176fdc3071388ab1bf3f59c1966e9cd21ec9910b93a5fa18234d4&",
+    "https://cdn.discordapp.com/attachments/1417374543609204866/1454269986678902836/images_34.jpg?ex=695079f7&is=694f2877&hm=5eef920b3960e015341ff207d60945c01958e34a411ba0e88fb7ed3edfee1117&",
+    "https://cdn.discordapp.com/attachments/1417374543609204866/1454269986993602704/images_35.jpg?ex=695079f7&is=694f2877&hm=e8c4079d5cc76460c6507320f34f854d7ffb8bbfe7d03173cdfa945af280970f&",
+    "https://cdn.discordapp.com/attachments/1417374543609204866/1454269988255957226/images_36.jpg?ex=695079f8&is=694f2878&hm=3683aeac0575b9383df95a2aeda30848c96b0c813958884663fd77b3cca6335f&",
+    "https://cdn.discordapp.com/attachments/1417374543609204866/1454269988893626378/images_37.jpg?ex=695079f8&is=694f2878&hm=4c03f29c87432fe779e29546e6f292012aa41d905437c72717618c80918e8070&",
+    "https://cdn.discordapp.com/attachments/1417374543609204866/1454269995860361418/images_38.jpg?ex=695079fa&is=694f287a&hm=61bb5130bb41405aca9faec7034bdc9f0f1f731798476bb793068a6b986088a1&",
+    "https://cdn.discordapp.com/attachments/1417374543609204866/1454269996606685297/images_31.jpg?ex=695079fa&is=694f287a&hm=5b369edc51f60ffc7412596f6427baccda59a89874707cc4b26730bf0a06ef83&",
+    "https://cdn.discordapp.com/attachments/1417374543609204866/1454269998225817761/images_30.jpg?ex=695079fa&is=694f287a&hm=32126d0fb5a75b13f64628833b05e56a555eb36c509dace8e47a745517b5f6f5&",
+    "https://cdn.discordapp.com/attachments/1417374543609204866/1454269998225817761/images_30.jpg?ex=695079fa&is=694f287a&hm=32126d0fb5a75b13f64628833b05e56a555eb36c509dace8e47a745517b5f6f5&",
+    "https://api.sylv.website/images/110e5c97023f54d497e1608d2fe5cf16.jpg",
+    "https://api.sylv.website/images/12260e8ed90e06beeb452d66b2b6364f.jpg",
+    "https://api.sylv.website/images/8369fcd98e623278a1405fcd57343690.jpg",
+    "https://api.sylv.website/images/19ad6fc2de26ec1f2ee0119e32b2efa1.jpg"
   ];
 
   const randomBird = birds[Math.floor(Math.random() * birds.length)];
