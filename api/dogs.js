@@ -22,7 +22,7 @@ export default function handler(req, res) {
     "https://cdn.discordapp.com/attachments/1417374543609204866/1454275286316089374/images_30.jpg?ex=69507ee7&is=694f2d67&hm=17fa9a190bcebfbb90aa67834a7aa13d1748752b4e767321d01443958c3637a9&"
   ];
 
-  const randomDog = dogs[Math.floor(Math.random() * birds.length)];
+  const randomDog = dogs[Math.floor(Math.random() * dogs.length)];
 
   res.status(200).json({
     author: "Cachorros Random",
